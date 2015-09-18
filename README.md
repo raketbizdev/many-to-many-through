@@ -48,11 +48,11 @@ $ rake db:migrate
 and after finishing the migration
 
 open 
-
-` app/models/staff.rb `
-` app/models/client.rb `
-` app/models/relationship.rb `
-
+```sh
+	app/models/staff.rb
+	app/models/client.rb
+	app/models/relationship.rb
+```
 inside the ` app/models/staff.rb `
 
 add this code
@@ -91,6 +91,121 @@ class Relationship < ActiveRecord::Base
 	belongs_to :client
 end
 ```
+Next we will configure the view form both the `staff` and `client`
+
+Open 
+```sh
+	app/views/clients/_form.html.erb
+	app/views/staffs/_form.html.erb
+```
+
+At this point we are using checkbox to select associations
+
+open `app/views/clients/_form.html.erb`
+
+add this to the form
+```sh
+<%= hidden_field_tag "client[staff_ids][]", nil %>
+<% Staff.all.each do |staff| %>
+<%= check_box_tag "client[staff_ids][]", staff.id, @client.staff_ids.include?(staff.id), id: dom_id(staff) %>
+<%= label_tag dom_id(staff), staff.full_name %><br>
+  <% end %>
+```
+It will be something like this
+```sh
+<%= form_for(@client) do |f| %>
+  <% if @client.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@client.errors.count, "error") %> prohibited this client from being saved:</h2>
+
+      <ul>
+      <% @client.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :full_name %><br>
+    <%= f.text_field :full_name %>
+  </div>
+  <div class="field">
+    <%= f.label :business_name %><br>
+    <%= f.text_field :business_name %>
+  </div>
+<%= hidden_field_tag "client[staff_ids][]", nil %>
+<% Staff.all.each do |staff| %>
+<%= check_box_tag "client[staff_ids][]", staff.id, @client.staff_ids.include?(staff.id), id: dom_id(staff) %>
+<%= label_tag dom_id(staff), staff.full_name %><br>
+  <% end %>
+  <br>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+```
+Then do it also on staff form
+
+open `app/views/staffs/_form.html.erb`
+
+add this 
+```sh
+<%= hidden_field_tag "staff[client_ids][]", nil %>
+<% Client.all.each do |client| %>
+<%= check_box_tag "staff[client_ids][]", client.id, @staff.client_ids.include?(client.id), id: dom_id(client) %>
+<%= label_tag dom_id(client), client.full_name %><br>
+<% end %>
+```
+
+something like this
+
+```sh
+<%= form_for(@staff) do |f| %>
+  <% if @staff.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@staff.errors.count, "error") %> prohibited this staff from being saved:</h2>
+
+      <ul>
+      <% @staff.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :full_name %><br>
+    <%= f.text_field :full_name %>
+  </div>
+  <div class="field">
+    <%= f.label :position %><br>
+    <%= f.text_field :position %>
+  </div>
+
+<%= hidden_field_tag "staff[client_ids][]", nil %>
+<% Client.all.each do |client| %>
+<%= check_box_tag "staff[client_ids][]", client.id, @staff.client_ids.include?(client.id), id: dom_id(client) %>
+<%= label_tag dom_id(client), client.full_name %><br>
+<% end %>
+<br>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
