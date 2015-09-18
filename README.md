@@ -85,11 +85,12 @@ then inside the ` app/models/relationship.rb ` add
 	belongs_to :client
 ```
 it should be look like this
+```sh
 class Relationship < ActiveRecord::Base
 	belongs_to :staff
 	belongs_to :client
 end
-
+```
 
 
 
