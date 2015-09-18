@@ -10,6 +10,8 @@ class StaffsController < ApplicationController
   # GET /staffs/1
   # GET /staffs/1.json
   def show
+    @staff = Staff.find(params[:id])
+    @clients = @staff.clients
   end
 
   # GET /staffs/new
@@ -25,7 +27,6 @@ class StaffsController < ApplicationController
   # POST /staffs.json
   def create
     @staff = Staff.new(staff_params)
-
     respond_to do |format|
       if @staff.save
         format.html { redirect_to @staff, notice: 'Staff was successfully created.' }
@@ -41,7 +42,7 @@ class StaffsController < ApplicationController
   # PATCH/PUT /staffs/1.json
   def update
     respond_to do |format|
-      if @staff.update(staff_params)
+      if @staff.update_attributes(staff_params) # @staff.update(staff_params)
         format.html { redirect_to @staff, notice: 'Staff was successfully updated.' }
         format.json { render :show, status: :ok, location: @staff }
       else
@@ -69,6 +70,6 @@ class StaffsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def staff_params
-      params.require(:staff).permit(:full_name, :position)
+      params.require(:staff).permit(:full_name, :position, client_ids: [])
     end
 end

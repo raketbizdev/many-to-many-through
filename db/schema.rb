@@ -21,11 +21,14 @@ ActiveRecord::Schema.define(version: 20150915062139) do
   end
 
   create_table "relationships", force: :cascade do |t|
-    t.string   "staff_id"
-    t.string   "client_id"
+    t.integer  "client_id"
+    t.integer  "staff_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_index "relationships", ["client_id"], name: "index_relationships_on_client_id"
+  add_index "relationships", ["staff_id"], name: "index_relationships_on_staff_id"
 
   create_table "staffs", force: :cascade do |t|
     t.string   "full_name"

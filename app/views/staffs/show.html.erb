@@ -6,9 +6,16 @@
 </p>
 
 <p>
+
   <strong>Position:</strong>
   <%= @staff.position %>
 </p>
+<p><strong>Clients</strong></p>
+<ul>
+  <% @staff.clients.each do |staff| %>
+    <li><%= staff.full_name %></li>
+  <% end %>
+</ul>
 
 <%= link_to 'Edit', edit_staff_path(@staff) %> |
 <%= link_to 'Back', staffs_path %>

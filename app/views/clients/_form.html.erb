@@ -19,6 +19,12 @@
     <%= f.label :business_name %><br>
     <%= f.text_field :business_name %>
   </div>
+<%= hidden_field_tag "client[staff_ids][]", nil %>
+<% Staff.all.each do |staff| %>
+<%= check_box_tag "client[staff_ids][]", staff.id, @client.staff_ids.include?(staff.id), id: dom_id(staff) %>
+<%= label_tag dom_id(staff), staff.full_name %><br>
+  <% end %>
+  <br>
   <div class="actions">
     <%= f.submit %>
   </div>
